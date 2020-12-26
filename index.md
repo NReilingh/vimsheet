@@ -1,65 +1,141 @@
 ---
 layout: default
-title: A Great Vim Cheat Sheet
+title: A Reasonably Good Vim Cheat Sheet
 ---
 
-
-# A Great Vim Cheat Sheet
-
+# A Reasonably Good Vim Cheat Sheet
 
 Note: If you’re decent at Vim and want your mind blown, check out [Advanced Vim](advanced.html).
 
-I’ve compiled a list of *essential* Vim commands that I use every day. I have then given a few instructions on how to make Vim as great as it should be, because it’s painful without configuration.
+This cheat sheet aims to cover the essentials accurately and somewhat thoroughly,
+and to illustrate patterns in Vim's design that can make commands easier to remember.
 
-## Cursor movement (Inside command/normal mode)
+Everything here should be compatible with stock Vim, and assumes that the reader
+is more interested in maintaining compatibility with any given server they SSH into
+than they are in having a super-tricked-out local development environment.
+
+Overhauling this document was used as a way to learn Vim by one of the authors.
+
+## Normal Mode - Motions
+
+### Cursor Movement
+
+Any motion (or command) can be prefixed with a number `[count]` to iterate it that many times.
 
 <img src="images/hjkl.png" alt="The four directions in Vim, keys h, j, k, and l."/>
 
-* `w` - jump by start of words (punctuation considered words)
-* `W` - jump by words (spaces separate words)
-* `e` - jump to end of words (punctuation considered words)
-* `E` - jump to end of words (no punctuation)
-* `b` - jump backward by words (punctuation considered words)
-* `B` - jump backward by words (no punctuation)
+| Words separated by:        | punctuation | whitespace |
+|----------------------------|-------------|------------|
+| Start of next word         | `w`         | `W`        |
+| End of next word           | `e`         | `E`        |
+| Beginning of previous word | `b`         | `B`        |
+| End of previous word       | `ge`        | `gE`       |
+
 * `0` - (zero) start of line
-* `^` - first non-blank character of line (same as 0w)
+* `^` - first non-blank character of line (same as `0w`, but don't forget about `I`!)
 * `$` - end of line
-* Advanced (in order of what I find most useful)
-    * `Ctrl+d` - move down half a page
-    * `Ctrl+u` - move up half a page
-    * `}` - go forward by paragraph (the next blank line)
-    * `{` - go backward by paragraph (the next blank line)
-    * `gg` - go to the top of the page
-    * `G` - go the bottom of the page
-    * `: [num] [enter]` - Go to that line in the document
-    * Searching
-        * `f [char]` - Move to the next char on the current line after the cursor
-        * `F [char]` - Move to the next char on the current line before the cursor
-        * `t [char]` - Move to before the next char on the current line after the cursor
-        * `T [char]` - Move to before the next char on the current line before the cursor
-        * All these commands can be followed by `;` (semicolon) to go to the next searched item, and `,` (comma) to go the previous searched item
 
-## Insert/Appending/Editing Text
-* Results in Insert mode
-    * `i` - start insert mode at cursor
-    * `I` - insert at the beginning of the line
-    * `a` - append after the cursor
-    * `A` - append at the end of the line
-    * `o` - open (append) blank line below current line (no need to press return)
-    * `O` - open blank line above current line
-    * `cc` - change (replace) an entire line
-    * `c  [movement command]` - change (replace) from the cursor to the move-to point.
-    * ex. `ce` changes from the cursor to the end of the cursor word
-* `Esc` or `Ctrl+[` - exit insert mode
-* `r  [char]` - replace a single character with the specified char (does not use Insert mode)
-* `d` - delete
-    * `d` - [movement command] deletes from the cursor to the move-to point.
-    * ex. `de` deletes from the cursor to the end of the current word
-* `dd` - delete the current line
+#### More Advanced
+
+* `Ctrl+d` - move down half a page
+* `Ctrl+u` - move up half a page
+* `(` `)` - go backward/forward by sentences
+* `{` `}` - go backward/forward by paragraph (blank lines)
+* `%` - go to start of innermost, or matching, `()` `[]` `{}`
+* `[num]G`, `:[num][enter]` - go to line number `[num]`
+* `G` - go the bottom of the page
+* `gg` - go to the top of the page
+* `-` - Like `k`, but on the first non-blank char of the line
+* `+` - Like `j`, but on the first non-blank char of the line
+* `_` - Like `+`, but with -1 to `[count]`
+
+#### Seeking within a line
+
+* `f[char]` - Seek forwards to the next instance of `[char]`
+* `F[char]` - Seek backwards to the next instance of `[char]`
+* `t[char]` - Seek forwards until adjacent to the next instance of `[char]`
+* `T[char]` - Seek backwards until adjacent to the next instance of `[char]`
+* All these commands can be followed by `;` to advance the seek to the next instance in the "forwards" (lowercase) direction,
+or `,` to advance the seek to the next instance in the "backwards" (uppercase) direction.
+(The _n_ prefix will not affect `;` or `,`.)
+
+## Normal Mode - Editing Text
+
+Be sure to see [Registers](#registers) below for how they work with yanked and deleted text.
+
+* `p` - Put (paste) the unnamed register _after_ the cursor (or current line)
+* `P` - Put (paste) the unnamed register _before_ the cursor (or current line)
+
+Put cursor/line behavior depends on whether the the register contains characterwise or linewise text.
+
+* Single-character edits
+    * `x` - Remove the character under the cursor
+    * `X` - Remove the character to the left of the cursor
+    * `s` - Remove the character under the cursor and enter insert mode
+    * `S` - Remove the entire line at the cursor and enter insert mode (same as `cc`)
+    * `r[char]` - replace a single character with the specified `[char]` (does not use Insert mode)
+    * `R` - Enter REPLACE mode, which is like INSERT mode but with overtype
+
 * Advanced
-    * `J` - join line below to the current one
+    * `J` - Join line below to the current one
 
-## Marking text (visual mode)
+### Entering Insert Mode
+
+|        | lowercase | uppercase |
+| -------|-----------|-----------|
+| insert | `i` - insert in front of cursor | `I` - ... in front of the first non-whitespace in the line
+| append | `a` - insert _after_ the cursor | `A` - ... at the _end_ of the line
+| open   | `o` - insert to a new line _below_ the cursor | `O` - ... _above_ the cursor
+
+### Multiple-character Edits
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Yank (y)</th>
+<th>Delete (d)</th>
+<th>Change (c)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>with <code>[noun]</code></td>
+<td><code>y[noun]</code> - Yank <code>[noun]</code></td>
+<td><code>d[noun]</code> - Delete <code>[noun]</code> </td>
+<td><code>c[noun]</code> - Delete <code>[noun]</code> and enter insert mode<br /><ul><li>e.g. <code>ce</code> changes from the cursor to the end of the cursor word</li></ul></td>
+</tr>
+<tr>
+<td>double</td>
+<td><code>yy</code> - Yank entire line</td>
+<td><code>dd</code> - Delete entire line</td>
+<td><code>cc</code> - Delete the entire line and enter insert mode</td>
+</tr>
+<tr>
+<td>uppercase</td>
+<td><code>Y</code> - same as <code>yy</code></td>
+<td><code>D</code> - Delete from the cursor to the end of the line</td>
+<td><code>C</code> - Delete from the cursor to the end of the line and enter insert mode</td>
+</tr>
+</tbody>
+</table>
+
+A noun can be a motion, like `2W` (two whitespace-delimited words) or a text object like `i>` (inner tag).
+See also [Text Objects](#objects).
+
+### Undo/Repeat
+
+* `u` - undo
+* `Ctrl+r` - redo
+* `.` - repeat last change
+
+## Insert Mode
+
+* `Ctrl+[` or `Esc` - exit insert mode
+* `Ctrl+r[register]` - Insert at the cursor from the register indicated (no `"` prefix)
+
+## Visual Mode
+
 * `v` - starts visual mode
     * From here you can move around as in normal mode (`h`, `j`, `k`, `l` etc.) and can then do a command (such as `y`, `d`, or `c`)
 * `V` - starts linewise visual mode
@@ -70,27 +146,53 @@ I’ve compiled a list of *essential* Vim commands that I use every day. I have 
     * `o` - move to other end of marked area
 
 ## Visual commands
+
 Type any of these while some text is selected to apply the action
 
 * `y` - yank (copy) marked text
 * `d` - delete marked text
 * `c` - delete the marked text and go into insert mode (like c does above)
 
-## Cut and Paste
-* `yy` - yank (copy) a line
-* `p` - put (paste) the clipboard after cursor
-* `P` - put (paste) before cursor
-* `dd` - delete (cut) a line
-* `x` - delete (cut) current character
-* `X` - delete previous character (like backspace)
+## Registers<a name="registers"></a>
+
+Prefix most yank/delete/change commands with `"[reg]` where `[reg]` is a specific register to copy to or from.
+
+* `:reg` - View the current registers
+* `""` - The unnamed register: default source of puts (p, P), acts like a pointer to the most recently written register
+* `"-` - Default register for deletes less than a full line
+* `"0` - Default destination of yanks
+* `"1` - Default destination of deletes of at least a full line; also some specific motion nouns
+* `"2, "3, ... "9` - Numbered history registers; shifted into from `"1` whenever it is written to
+* `"a-"z, "A-"Z` - Named registers. Use uppercase variants to append.
+* `"+` - System pasteboard; access to copy/paste from the system.
+
+## Text Objects<a name="objects"></a>
+
+Objects must be prefixed with `a` or `i`, for "a" ("an") object or "inner" object.
+
+* `w`, `W` - word or Word (as above)
+* `s` - Sentence
+* `p` - Paragraph
+* `"` - Double-quoted string
+* `'` - Single-quoted string
+* `` ` `` - Backquoted string
+* `(`, `)`, or `b` - Parenthesized block
+* `[` or `]` - Bracketed block
+* `{` or `}` - Braced block
+* `t` - XML-style tag block
+* `<` or `>` - XML-style tag itself
+
+In practice, use these objects in context of another command, with the a/i prefix, like `cib`.
 
 ## Exiting
+
 * `:w` - write (save) the file, but don't exit
 * `:wq` - write (save) and quit
 * `:q` - quit (fails if anything has changed)
 * `:q!` - quit and throw away changes
 
 ## Search/Replace
+
 * `/pattern` - search for pattern
 * `?pattern` - search backward for pattern
 * `n` - repeat search in same direction
@@ -99,6 +201,7 @@ Type any of these while some text is selected to apply the action
 * `:%s/old/new/gc` - replace all old with new throughout file with confirmations
 
 ## Working with multiple files - Tabs
+
 * `:e filename` - Edit a file
 * `:tabe` - Make a new tab
 * `gt` - Go to the next tab
@@ -111,6 +214,7 @@ Type any of these while some text is selected to apply the action
     * `ctrl+wq` - Quit a window
 
 ## Working with multiple files - Buffers
+
 * `:enew` - edit a new, unnamed buffer
 * `:ls` - list all open buffers
 * `:bn` - go to the next buffer
@@ -123,17 +227,13 @@ Type any of these while some text is selected to apply the action
 * `Ctrl+i` - Reverse the effect of `Ctrl+o`
 
 ## Marks
+
 Marks allow you to jump to designated points in your code.
 
-* `m{a-z}` - Set mark {a-z} at cursor position
-* A capital mark {A-Z} sets a global mark and will work between files
-* `‘{a-z}` - move the cursor to the start of the line where the mark was set
-* `‘’` - go back to the previous jump location
-
-## General
-* `u` - undo
-* `Ctrl+r` - redo
-* `.` - repeat last command
+* `ma-mz` - Set mark `[a-z]` at cursor position
+* A capital mark `[A-Z]` sets a global mark and will work between files
+* `'a-'z` - move the cursor to the start of the line where the mark was set
+* `''` - go back to the previous jump location
 
 # Making Vim actually useful
 Vim is quite unpleasant out of the box. For example, typing `:w` for every file save is awkward and copying and pasting to the system clipboard does not work. However, a few changes will get you much closer to the editor of your dreams.
@@ -183,3 +283,10 @@ I don’t personally use these yet, but I’ve heard other people do!
 
 * `:wqa` - Write and quit all open tabs (thanks Brian Zick)
 
+## Other resources
+
+* Clickable [Vim mode state diagram](https://gist.github.com/darcyparker/1886716/raw/c1ee7657010278a787c6502b796a6766a40d56aa/vimModeStateDiagram.svg)
+* [Vim Text Objects: The Definitive Guide](https://blog.carbonfive.com/vim-text-objects-the-definitive-guide/)
+* [Vim as a Language](https://benmccormick.org/2014/07/02/learning-vim-in-2014-vim-as-language)
+* [Vim Registers](https://www.brianstorti.com/vim-registers/)
+* [Mastering the Vim Language](https://www.youtube.com/watch?v=wlR5gYd6um0)
