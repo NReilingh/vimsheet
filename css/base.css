@@ -326,13 +326,12 @@ blockquote p {
 }
 
 table {
-	width: 100%;
+	max-width: 100%;
 	border-top: 1px solid #CCCCCC;
 	border-bottom: 2px solid #CCC;
 	color: #000;
 	background: #fff;
 	border-collapse: separate;
-	font-size: 11px;
 }
 
 caption {
@@ -349,7 +348,6 @@ th {
 }
 
 td {
-	text-align: center;
 	padding: 3px 5px;
 }
 .odd td {
