@@ -5,7 +5,7 @@ title: A Reasonably Good Vim Cheat Sheet
 
 # A Reasonably Good Vim Cheat Sheet
 
-Note: If you’re decent at Vim and want your mind blown, check out [Advanced Vim](advanced.html).
+This is a remix of <http://vimsheet.com>.
 
 This cheat sheet aims to cover the essentials accurately and somewhat thoroughly,
 and to illustrate patterns in Vim's design that can make commands easier to remember.
@@ -13,8 +13,26 @@ and to illustrate patterns in Vim's design that can make commands easier to reme
 Everything here should be compatible with stock Vim, and assumes that the reader
 is more interested in maintaining compatibility with any given server they SSH into
 than they are in having a super-tricked-out local development environment.
+In practice, this means that plugins are suggested to be used only when they would
+not conflict with the muscle memory one builds up making edits using stock vim.
 
-Overhauling this document was used as a way to learn Vim by one of the authors.
+As is surely the case with many Cheat Sheet projects,
+working on this document was used as a way to learn Vim by one of the authors.
+
+### Notation
+
+The notational convention here is to use the same syntax for combination shortcuts
+as would be used when writing a key mapping or macro.
+That is, instead of `Ctrl+r` or `CTRL-R`, we will write `<C-r>`.
+See also `:help key-notation`.
+
+* `<S-...>` - Shift-key
+* `<C-...>` - Control-key
+* Other modifiers tend to have support issues depending on your platform,
+so you probably won't use them, but here's what the notation is:
+  * `<M-...>` - Meta-key
+  * `<A-...>` - Alt-key
+  * `<D-...>` - Command-key (macOS)
 
 ## Normal Mode - Motions
 
@@ -31,18 +49,18 @@ Any motion (or command) can be prefixed with a number `[count]` to iterate it th
 | Beginning of previous word | `b`         | `B`        |
 | End of previous word       | `ge`        | `gE`       |
 
-* `0` - (zero) start of line
-* `^` - first non-blank character of line (same as `0w`, but don't forget about `I`!)
+* `0` (zero) - start of line
+* `^` - first non-blank character of line (similar to `0w`, but don't forget about `I`!)
 * `$` - end of line
 
 #### More Advanced
 
-* `Ctrl+d` - move down half a page
-* `Ctrl+u` - move up half a page
+* `<C-d>` - move down half a page
+* `<C-u>` - move up half a page
 * `(` `)` - go backward/forward by sentences
 * `{` `}` - go backward/forward by paragraph (blank lines)
 * `%` - go to start of innermost, or matching, `()` `[]` `{}`
-* `[num]G`, `:[num][enter]` - go to line number `[num]`
+* `[num]G`, `:[num]<Enter>` - go to line number `[num]`
 * `G` - go the bottom of the page
 * `gg` - go to the top of the page
 * `-` - Like `k`, but on the first non-blank char of the line
@@ -68,82 +86,59 @@ Be sure to see [Registers](#registers) below for how they work with yanked and d
 
 Put cursor/line behavior depends on whether the the register contains characterwise or linewise text.
 
-* Single-character edits
-    * `x` - Remove the character under the cursor
-    * `X` - Remove the character to the left of the cursor
-    * `s` - Remove the character under the cursor and enter insert mode
-    * `S` - Remove the entire line at the cursor and enter insert mode (same as `cc`)
-    * `r[char]` - replace a single character with the specified `[char]` (does not use Insert mode)
-    * `R` - Enter REPLACE mode, which is like INSERT mode but with overtype
+### Entering Insert Mode
+
+|                | lowercase | uppercase |
+| ---------------|-----------|-----------|
+| Insert (i)     | `i` - insert in front of cursor | `I` - ... in front of the first non-whitespace in the line
+| Append (a)     | `a` - insert _after_ the cursor | `A` - ... at the _end_ of the line
+| Open (o)       | `o` - insert to a new line _below_ the cursor | `O` - ... _above_ the cursor
+| Substitute (s) | `s` - remove char at the cursor first | `S` - Clear entire line first (same as `cc`)
+
+`I` and `A` are also used in VISUAL BLOCK mode to insert before or after the block selection.
+
+### Single-character edits
+
+* `x` - Remove the character under the cursor
+* `X` - Remove the character to the left of the cursor
+* `r[char]` - replace a single character with the specified `[char]` (does not use Insert mode)
+* `R` - Enter REPLACE mode, which is like INSERT mode but with overtype
 
 * Advanced
     * `J` - Join line below to the current one
 
-### Entering Insert Mode
-
-|        | lowercase | uppercase |
-| -------|-----------|-----------|
-| insert | `i` - insert in front of cursor | `I` - ... in front of the first non-whitespace in the line
-| append | `a` - insert _after_ the cursor | `A` - ... at the _end_ of the line
-| open   | `o` - insert to a new line _below_ the cursor | `O` - ... _above_ the cursor
-
 ### Multiple-character Edits
 
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Yank (y)</th>
-<th>Delete (d)</th>
-<th>Change (c)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>with <code>[noun]</code></td>
-<td><code>y[noun]</code> - Yank <code>[noun]</code></td>
-<td><code>d[noun]</code> - Delete <code>[noun]</code> </td>
-<td><code>c[noun]</code> - Delete <code>[noun]</code> and enter insert mode<br /><ul><li>e.g. <code>ce</code> changes from the cursor to the end of the cursor word</li></ul></td>
-</tr>
-<tr>
-<td>double</td>
-<td><code>yy</code> - Yank entire line</td>
-<td><code>dd</code> - Delete entire line</td>
-<td><code>cc</code> - Delete the entire line and enter insert mode</td>
-</tr>
-<tr>
-<td>uppercase</td>
-<td><code>Y</code> - same as <code>yy</code></td>
-<td><code>D</code> - Delete from the cursor to the end of the line</td>
-<td><code>C</code> - Delete from the cursor to the end of the line and enter insert mode</td>
-</tr>
-</tbody>
-</table>
+|                                    | Yank (y)    | Delete (d) | Change (c) - Delete and enter insert mode |
+|------------------------------------|-------------|------------|-------------------------------------------|
+| `[noun]`                           | `y[noun]`   | `d[noun]`  | `c[noun]`                                 |
+| entire line                        | `yy` or `Y` | `dd`       | `cc`                                      |
+| from cursor to the end of the line | `y$`        | `D`        | `C`                                       |
 
-A noun can be a motion, like `2W` (two whitespace-delimited words) or a text object like `i>` (inner tag).
+A noun can be a motion, like `2W` (two whitespace-delimited words) or a text object like `it` (inner tag block).
 See also [Text Objects](#objects).
 
 ### Undo/Repeat
 
 * `u` - undo
-* `Ctrl+r` - redo
+* `<C-r>` - redo
 * `.` - repeat last change
 
 ## Insert Mode
 
-* `Ctrl+[` or `Esc` - exit insert mode
-* `Ctrl+r[register]` - Insert at the cursor from the register indicated (no `"` prefix)
+* `<C-[>` or `<Esc>` - exit insert mode
+* `<C-r>[register]` - Insert at the cursor from the register indicated (no `"` prefix)
 
 ## Visual Mode
 
 * `v` - starts visual mode
     * From here you can move around as in normal mode (`h`, `j`, `k`, `l` etc.) and can then do a command (such as `y`, `d`, or `c`)
 * `V` - starts linewise visual mode
-* `Ctrl+v` - start visual block mode
-* `Esc` or `Ctrl+[` - exit visual mode
+* `<C-v>` - start visual block mode
+* `<C-[>` or `<Esc>` - exit visual mode
 * Advanced
-    * `O` - move to other corner of block
-    * `o` - move to other end of marked area
+    * `o` - Move cursor to opposite corner of the visual selection
+    * `O` - In VISUAL BLOCK mode, move cursor to opposing corner _within the same line_
 
 ## Visual commands
 
@@ -162,8 +157,8 @@ Prefix most yank/delete/change commands with `"[reg]` where `[reg]` is a specifi
 * `"-` - Default register for deletes less than a full line
 * `"0` - Default destination of yanks
 * `"1` - Default destination of deletes of at least a full line; also some specific motion nouns
-* `"2, "3, ... "9` - Numbered history registers; shifted into from `"1` whenever it is written to
-* `"a-"z, "A-"Z` - Named registers. Use uppercase variants to append.
+* `"[2-9]` - Numbered history registers; shifted into from `"1` whenever it is written to
+* `"[a-z]`, `"[A-Z]` - Named registers. Use uppercase variants to append.
 * `"+` - System pasteboard; access to copy/paste from the system.
 
 ## Text Objects<a name="objects"></a>
@@ -190,8 +185,10 @@ In practice, use these objects in context of another command, with the a/i prefi
 * `:wq` - write (save) and quit
 * `:q` - quit (fails if anything has changed)
 * `:q!` - quit and throw away changes
+* `:wqa` - Write and quit all open tabs (thanks Brian Zick)
+* `:x` - Write and exit, but only write if there are changes
 
-## Search/Replace
+## Search/Replace [unrevised]
 
 * `/pattern` - search for pattern
 * `?pattern` - search backward for pattern
@@ -200,7 +197,7 @@ In practice, use these objects in context of another command, with the a/i prefi
 * `:%s/old/new/g` - replace all old with new throughout file ([gn](http://vimcasts.org/episodes/operating-on-search-matches-using-gn/) is better though)
 * `:%s/old/new/gc` - replace all old with new throughout file with confirmations
 
-## Working with multiple files - Tabs
+## Working with multiple files - Tabs [unrevised]
 
 * `:e filename` - Edit a file
 * `:tabe` - Make a new tab
@@ -213,7 +210,7 @@ In practice, use these objects in context of another command, with the a/i prefi
     * `ctrl+ww` - switch between windows
     * `ctrl+wq` - Quit a window
 
-## Working with multiple files - Buffers
+## Working with multiple files - Buffers [unrevised]
 
 * `:enew` - edit a new, unnamed buffer
 * `:ls` - list all open buffers
@@ -230,62 +227,80 @@ In practice, use these objects in context of another command, with the a/i prefi
 
 Marks allow you to jump to designated points in your code.
 
-* `ma-mz` - Set mark `[a-z]` at cursor position
+* `m[a-z]` - Set mark `[a-z]` at cursor position
 * A capital mark `[A-Z]` sets a global mark and will work between files
-* `'a-'z` - move the cursor to the start of the line where the mark was set
+    * Hint: use a global mark like `'V` as a shortcut to your `.vimrc` file.
+* `'[a-z]` - move the cursor to the start of the line where the mark was set
 * `''` - go back to the previous jump location
 
-# Making Vim actually useful
-Vim is quite unpleasant out of the box. For example, typing `:w` for every file save is awkward and copying and pasting to the system clipboard does not work. However, a few changes will get you much closer to the editor of your dreams.
+## Vim Help
+
+* `:help [topic]` - Search help pages for topic
+    * `[topic]` can be a keystroke like `CTRL-R` (shorthand like `^r` is also accepted)
+* Keystrokes can be prefixed to specify specific modes other than normal:
+    * `v_` - Visual mode prefix
+    * `i_` - Insert mode prefix
+    * `c_` - Command mode prefix
+* `<C-]>` - Jump to keyword
+* Try `:help help-summary` for more tips
+
+# Other Tips
 
 ## .vimrc
-* [My .vimrc file](https://github.com/theicfire/dotfiles/blob/master/vim/.vimrc) has some pretty great ideas I haven't seen elsewhere.
-* This is a minimal vimrc that focuses on three priorities:
-    * adding options that are strictly better (like more information showing in autocomplete)
-    * more convenient keystrokes (like  `[space]w` for write, instead of `:w [enter]`)
-    * a similar workflow to normal text editors (like enabling the mouse)
 
-### Installation
-* Copy this to your home directory and restart Vim. Read through it to see what you can now do (like  `[space]w` to save a file)
-    * Mac users - making a hidden normal file is suprisingly tricky. Here’s one way:
-        * in the command line, go to the home directory
-        * type `nano .vimrc`
-        * paste in the contents of the .vimrc file
-        * `ctrl+x`, `y`, `[enter]` to save
-* You should now be able to press  `[space]w` in normal mode to save a file.
-* `[space]p` should paste from the system clipboard (outside of Vim).
-    * If you can’t paste, it’s probably because Vim was not built with the system clipboard option. To check, run `vim --version` and see if `+clipboard` exists. If it says `-clipboard`, you will not be able to copy from outside of Vim.
-    * For Mac users, homebrew install Vim with the clipboard option. Install homebrew and then run `brew install vim`.
-        * then move the old Vim binary: `$ mv /usr/bin/vim /usr/bin/vimold`
-        * restart your terminal and you should see `vim --version` now with `+clipboard`
+On macOS, Vim's included `.vimrc` file turns on a lot of convenient features like mouse support.
+You might want to make some of the following tweaks.
+Remember that the `<Leader>` key, by default, is `\`.
 
-## Plugins
-* The easiest way to make Vim more powerful is to use Vintageous in Sublime Text (version 3). This gives you Vim mode inside Sublime. I suggest this (or a similar setup with the Atom editor) if you aren't a Vim master. Check out [Advanced Vim](advanced.html) if you are.
-* Vintageous is great, but I suggest you change a few settings to make it better.
-    * Clone [this repository](https://github.com/theicfire/Vintageous) to `~/.config/sublime-text-3/Packages/Vintageous`, or similar. Then check out the "custom" branch.
-        * Alternatively, you can get a more updated Vintageous version by cloning [the official](https://github.com/guillermooo/Vintageous) repository and then copying over [this patch](https://github.com/theicfire/Vintageous/commit/19ff6311b01e3ae259b7eb8e3944687b42ba06ff).
-    * Change the user settings (`User/Preferences.sublime-settings`) to include:
-        * `"caret_style": "solid"`
-        * This will make the cursor not blink, like in Vim.
-        * Sublime Text might freeze when you do this. It’s a bug; just restart Sublime Text after changing the file.
-    * `ctrl+r` in Vim means "redo". But there is a handy Ctrl + R shortcut in Sublime Text that gives an "outline" of a file. I remapped it to alt+r by putting this in the User keymap
-        * `{ "keys": ["alt+r"], "command": "show_overlay", "args": {"overlay": "goto", "text": "@"} },`
-    * [Add the ability to toggle Vintageous on and off](https://github.com/guillermooo/Vintageous/wiki/Toggling-Vintageous)
-    * Mac users: you will not have the ability to hold down a navigation key (like holding j to go down). To fix this, run the commands specified here: [https://gist.github.com/kconragan/2510186](https://gist.github.com/kconragan/2510186)
+### Reload `.vimrc` on Save
 
-* Now you should be able to restart sublime and have a great Vim environment! Sweet Dude.
+    if has("autocmd")
+        autocmd BufWritePost .vimrc source $MYVIMRC
+    endif
 
-## Switch Caps Lock and Escape
-* I highly recommend you switch the mapping of your caps lock and escape keys. You'll love it, promise! Switching the two keys is platform dependent; Google should get you the answer.
+### Line Numbering
 
-## Other
-I don’t personally use these yet, but I’ve heard other people do!
+    set number
+    set relativenumber
 
-* `:wqa` - Write and quit all open tabs (thanks Brian Zick)
+### Visible Whitespace
 
-## Other resources
+    set listchars=tab:\|\ ,space:·
+    set list
+    " Set a shortcut to toggle visible whitespace on and off.
+    nmap <Leader>l :set list!<CR>
+
+### Stop Highlighting After Search
+
+    " Must be double-escape to avoid conflicting with mouse scroll
+    nmap <Esc><Esc>:noh<CR><Esc>
+
+## Plugins [incomplete]
+
+[vim-plug](https://github.com/junegunn/vim-plug)
+
+## Map Caps Lock to Control
+
+No, not Escape. You don't actually need to use escape if you use `<C-[>` instead.
+On [the machine](https://en.wikipedia.org/wiki/ADM-3A) that Bill Joy originally used to write `vi`,
+the control key was placed where caps lock is on most keyboards today.
+Escape was placed where the tab key is today, so if you want to be totally based,
+you could try swapping those.
+
+Some people also like mapping `jk` to exit insert mode.
+The problem with this is that you would have to accomplish it in your `.vimrc`,
+and this would violate our stated intention of not messing with muscle memory
+when SSHing into servers.
+The Caps Lock/Tab remaps above can be accomplished on the operating system level,
+or better yet on the keyboard hardware level, so they don't depend on the particular
+`.vimrc` file in the environment you are interacting with.
+
+## See Also
 
 * Clickable [Vim mode state diagram](https://gist.github.com/darcyparker/1886716/raw/c1ee7657010278a787c6502b796a6766a40d56aa/vimModeStateDiagram.svg)
+
+## References
+
 * [Vim Text Objects: The Definitive Guide](https://blog.carbonfive.com/vim-text-objects-the-definitive-guide/)
 * [Vim as a Language](https://benmccormick.org/2014/07/02/learning-vim-in-2014-vim-as-language)
 * [Vim Registers](https://www.brianstorti.com/vim-registers/)
