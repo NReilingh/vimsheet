@@ -74,7 +74,7 @@ or `,` to advance the seek to the next instance in the "backwards" (uppercase) d
 
 * `(` `)` - go backward/forward by sentences
 * `{` `}` - go backward/forward by paragraph (blank lines)
-* `%` - go to next, or matching, `()` `[]` `{}`
+* `%` - go to next (or matching) `()`, `[]`, `{}`
 * `-` - Like `k`, but on the first non-blank char of the line
 * `+` - Like `j`, but on the first non-blank char of the line
 * `_` - Like `+`, but with -1 to `[count]`
@@ -316,7 +316,7 @@ you could try swapping those.
 Some people also like mapping `jk` to exit insert mode.
 The problem with this is that you would have to accomplish it in your `.vimrc`,
 and this would violate our stated intention of not messing with muscle memory
-when SSHing into servers.
+when remoting into other machines.
 The Caps Lock/Tab remaps above can be accomplished on the operating system level,
 or better yet on the keyboard hardware level, so they don't depend on the particular
 `.vimrc` file in the environment you are interacting with.
