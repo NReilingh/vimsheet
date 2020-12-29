@@ -53,20 +53,6 @@ Any motion (or command) can be prefixed with a number `[count]` to iterate it th
 * `^` - first non-blank character of line (similar to `0w`, but don't forget about `I`!)
 * `$` - end of line
 
-#### More Advanced
-
-* `<C-d>` - move down half a page
-* `<C-u>` - move up half a page
-* `(` `)` - go backward/forward by sentences
-* `{` `}` - go backward/forward by paragraph (blank lines)
-* `%` - go to start of innermost, or matching, `()` `[]` `{}`
-* `[num]G`, `:[num]<Enter>` - go to line number `[num]`
-* `G` - go the bottom of the page
-* `gg` - go to the top of the page
-* `-` - Like `k`, but on the first non-blank char of the line
-* `+` - Like `j`, but on the first non-blank char of the line
-* `_` - Like `+`, but with -1 to `[count]`
-
 #### Seeking within a line
 
 * `f[char]` - Seek forwards to the next instance of `[char]`
@@ -75,7 +61,27 @@ Any motion (or command) can be prefixed with a number `[count]` to iterate it th
 * `T[char]` - Seek backwards until adjacent to the next instance of `[char]`
 * All these commands can be followed by `;` to advance the seek to the next instance in the "forwards" (lowercase) direction,
 or `,` to advance the seek to the next instance in the "backwards" (uppercase) direction.
-(The _n_ prefix will not affect `;` or `,`.)
+(A `[count]` prefix will not affect `;` or `,`.)
+
+#### Linewise Movement
+
+* `(` `)` - go backward/forward by sentences
+* `{` `}` - go backward/forward by paragraph (blank lines)
+* `%` - go to next, or matching, `()` `[]` `{}`
+* `-` - Like `k`, but on the first non-blank char of the line
+* `+` - Like `j`, but on the first non-blank char of the line
+* `_` - Like `+`, but with -1 to `[count]`
+
+#### More Advanced
+
+* `<C-d>` - move down half a page
+* `<C-u>` - move up half a page
+* `[num]G`, `:[num]<Enter>` - go to line number `[num]`
+* `G` - go the bottom of the page
+* `gg` - go to the top of the page
+* `<C-o>` - Jump to previous cursor position
+* `<C-i>` - Jump to next cursor position
+* `:ju` - Show jumplist
 
 ## Normal Mode - Editing Text
 
@@ -94,8 +100,6 @@ Put cursor/line behavior depends on whether the the register contains characterw
 | Append (a)     | `a` - insert _after_ the cursor | `A` - ... at the _end_ of the line
 | Open (o)       | `o` - insert to a new line _below_ the cursor | `O` - ... _above_ the cursor
 | Substitute (s) | `s` - remove char at the cursor first | `S` - Clear entire line first (same as `cc`)
-
-`I` and `A` are also used in VISUAL BLOCK mode to insert before or after the block selection.
 
 ### Single-character edits
 
@@ -121,6 +125,7 @@ See also [Text Objects](#objects).
 ### Undo/Repeat
 
 * `u` - undo
+* `U` - Undo entire line
 * `<C-r>` - redo
 * `.` - repeat last change
 
@@ -136,17 +141,23 @@ See also [Text Objects](#objects).
 * `V` - starts linewise visual mode
 * `<C-v>` - start visual block mode
 * `<C-[>` or `<Esc>` - exit visual mode
-* Advanced
+* Motions in visual mode
+    * Use characterwise and linewise motions listed above to select, starting from initial position
     * `o` - Move cursor to opposite corner of the visual selection
     * `O` - In VISUAL BLOCK mode, move cursor to opposing corner _within the same line_
+    * Also use [text objects](#objects) to expand selection
 
 ## Visual commands
 
 Type any of these while some text is selected to apply the action
 
-* `y` - yank (copy) marked text
-* `d` - delete marked text
-* `c` - delete the marked text and go into insert mode (like c does above)
+* `y` - yank (copy) selected text
+* `d` - delete selected text
+* `c` - delete the selected text and go into insert mode (like c does above)
+* `r[char]` - Replace selection with `[char]`
+* `v`, `V`, `<C-v>` - Return to normal mode (when used symmetrically)
+* `I` - Block insert
+* `A` - Block append
 
 ## Registers<a name="registers"></a>
 
@@ -168,9 +179,7 @@ Objects must be prefixed with `a` or `i`, for "a" ("an") object or "inner" objec
 * `w`, `W` - word or Word (as above)
 * `s` - Sentence
 * `p` - Paragraph
-* `"` - Double-quoted string
-* `'` - Single-quoted string
-* `` ` `` - Backquoted string
+* `"`, `'`, `` ` `` - Quoted strings (only works within one line)
 * `(`, `)`, or `b` - Parenthesized block
 * `[` or `]` - Bracketed block
 * `{` or `}` - Braced block
@@ -242,6 +251,7 @@ Marks allow you to jump to designated points in your code.
     * `i_` - Insert mode prefix
     * `c_` - Command mode prefix
 * `<C-]>` - Jump to keyword
+* `<C-t>` - Jump back (uses `tag-stack`)
 * Try `:help help-summary` for more tips
 
 # Other Tips
@@ -305,3 +315,4 @@ or better yet on the keyboard hardware level, so they don't depend on the partic
 * [Vim as a Language](https://benmccormick.org/2014/07/02/learning-vim-in-2014-vim-as-language)
 * [Vim Registers](https://www.brianstorti.com/vim-registers/)
 * [Mastering the Vim Language](https://www.youtube.com/watch?v=wlR5gYd6um0)
+* [How to Do 90% of What Plugins Do (With Just Vim)](https://www.youtube.com/watch?v=XA2WjJbmmoM)
