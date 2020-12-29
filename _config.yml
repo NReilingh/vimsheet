@@ -1,5 +1,5 @@
 name: White Paper
-markdown: kramdown
+markdown: GFM
 url: http://vimsheet.com
 description: A Reasonably Good Vim Cheat Sheet
 

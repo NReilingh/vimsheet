@@ -53,12 +53,14 @@ Any motion (or command) can be prefixed with a number `[count]` to iterate it th
 * Window Movement:
     * `zt`, `zz`, `zb` - Scroll cursor location to top, middle, bottom
 
-#### Seeking within a line
+#### Left-right Shortcuts
 
 * `0` (zero) - start of line
 * `^` - first non-blank character of line (similar to `0w` and `_`, but don't forget about `I`!)
 * `$` - end of line
 * `g_` - last non-blank character of line
+
+#### Seeking Within a Line
 
 * `f[char]` - Seek forwards to the next instance of `[char]`
 * `F[char]` - Seek backwards to the next instance of `[char]`
@@ -112,7 +114,6 @@ Put cursor/line behavior depends on whether the the register contains characterw
 * `X` - Remove the character to the left of the cursor
 * `r[char]` - replace a single character with the specified `[char]` (does not use Insert mode)
 * `R` - Enter REPLACE mode, which is like INSERT mode but with overtype
-
 * Advanced
     * `J` - Join line below to the current one
 
@@ -148,6 +149,7 @@ See also [Text Objects](#objects).
     * From here you can move around as in normal mode (`h`, `j`, `k`, `l` etc.) and can then do a command (such as `y`, `d`, or `c`)
 * `V` - starts linewise visual mode
 * `<C-v>` - start visual block mode
+* `gv` - After doing a command that leaves you in normal mode, return to the same visual mode with the same selection
 * `<C-[>` or `<Esc>` - exit visual mode
 * Motions in visual mode
     * Use characterwise and linewise motions listed above to select, starting from initial position
@@ -170,8 +172,6 @@ Type any of these while some text is selected to apply the action
 * `U`, `u` - Uppercase/lowercase
 * `J` - Join lines
 * `>`, `<` - Shift right/left by one `'shiftwidth'` (don't forget about `[count]` prefix)
-
-* `gv` - After doing a command that leaves you in normal mode, return to the same visual mode with the same selection
 
 ## Registers<a name="registers"></a>
 
@@ -215,7 +215,6 @@ In practice, use these objects in context of another command, with the a/i prefi
 
 * `*` - Search forward for the word nearest to the cursor
 * `#` - Search backward for the word nearest to the cursor
-
 * `/pattern` - search for pattern
 * `?pattern` - search backward for pattern
 * `n` - repeat search in same direction
