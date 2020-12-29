@@ -49,11 +49,16 @@ Any motion (or command) can be prefixed with a number `[count]` to iterate it th
 | Beginning of previous word | `b`         | `B`        |
 | End of previous word       | `ge`        | `gE`       |
 
-* `0` (zero) - start of line
-* `^` - first non-blank character of line (similar to `0w`, but don't forget about `I`!)
-* `$` - end of line
+* `H`, `M`, `L` - Screen-relative line navigation: Home (top), Middle, Last (bottom)
+* Window Movement:
+    * `zt`, `zz`, `zb` - Scroll cursor location to top, middle, bottom
 
 #### Seeking within a line
+
+* `0` (zero) - start of line
+* `^` - first non-blank character of line (similar to `0w` and `_`, but don't forget about `I`!)
+* `$` - end of line
+* `g_` - last non-blank character of line
 
 * `f[char]` - Seek forwards to the next instance of `[char]`
 * `F[char]` - Seek backwards to the next instance of `[char]`
@@ -122,6 +127,9 @@ Put cursor/line behavior depends on whether the the register contains characterw
 A noun can be a motion, like `2W` (two whitespace-delimited words) or a text object like `it` (inner tag block).
 See also [Text Objects](#objects).
 
+* `>[noun]`, `<[noun]` - Shift `[noun]` forward/backward by one `'shiftwidth'`.
+* `>>`, `<<` - Shift line forward/backward by one `'shiftwidth'`.
+
 ### Undo/Repeat
 
 * `u` - undo
@@ -154,10 +162,16 @@ Type any of these while some text is selected to apply the action
 * `y` - yank (copy) selected text
 * `d` - delete selected text
 * `c` - delete the selected text and go into insert mode (like c does above)
+* `p` - Replace with buffer
 * `r[char]` - Replace selection with `[char]`
 * `v`, `V`, `<C-v>` - Return to normal mode (when used symmetrically)
 * `I` - Block insert
 * `A` - Block append
+* `U`, `u` - Uppercase/lowercase
+* `J` - Join lines
+* `>`, `<` - Shift right/left by one `'shiftwidth'` (don't forget about `[count]` prefix)
+
+* `gv` - After doing a command that leaves you in normal mode, return to the same visual mode with the same selection
 
 ## Registers<a name="registers"></a>
 
@@ -198,6 +212,9 @@ In practice, use these objects in context of another command, with the a/i prefi
 * `:x` - Write and exit, but only write if there are changes
 
 ## Search/Replace [unrevised]
+
+* `*` - Search forward for the word nearest to the cursor
+* `#` - Search backward for the word nearest to the cursor
 
 * `/pattern` - search for pattern
 * `?pattern` - search backward for pattern
