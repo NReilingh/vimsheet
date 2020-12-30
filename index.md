@@ -164,7 +164,7 @@ Type any of these while some text is selected to apply the action
 * `y` - yank (copy) selected text
 * `d` - delete selected text
 * `c` - delete the selected text and go into insert mode (like c does above)
-* `p` - Replace with buffer
+* `p` - Replace with register
 * `r[char]` - Replace selection with `[char]`
 * `v`, `V`, `<C-v>` - Return to normal mode (when used symmetrically)
 * `I` - Block insert
