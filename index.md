@@ -148,7 +148,7 @@ See also [Text Objects](#objects).
 * `<C-r>` - redo
 * `.` - repeat last change
 
-## Insert Mode
+## Insert Mode [incomplete]
 
 * `<C-[>` or `<Esc>` - exit insert mode
 * `<C-r>[register]` - Insert at the cursor from the register indicated (no `"` prefix)
