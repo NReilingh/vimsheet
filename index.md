@@ -7,17 +7,24 @@ title: A Reasonably Good Vim Cheat Sheet
 
 This is a remix of <http://vimsheet.com>.
 
-This cheat sheet aims to cover the essentials accurately and somewhat thoroughly,
-and to illustrate patterns in Vim's design that can make commands easier to remember.
+This cheat sheet assumes that you already know how Vim works, conceptually speaking,
+but want a quick reference for the default key mappings
+and a way to remind yourself of some of the more clever things
+that Vim is capable of.
+
+In light of that, this sheet aims to be fairly thorough in its coverage,
+but also to illustrate patterns in Vim's design that can make commands easier to remember.
 
 Everything here should be compatible with stock Vim, and assumes that the reader
 is more interested in maintaining compatibility with any given server they SSH into
 than they are in having a super-tricked-out local development environment.
-In practice, this means that plugins are suggested to be used only when they would
-not conflict with the muscle memory one builds up making edits using stock vim.
+In practice, this means that plugins and `.vimrc` hacks are suggested to be used
+only when they would not conflict with the muscle memory one builds up
+making edits using stock vim.
 
-As is surely the case with many Cheat Sheet projects,
-working on this document was used as a way to learn Vim by one of the authors.
+From the author: I add content and revise sections of the original cheat sheet
+as I delve into each feature and absorb those parts of the manual.
+As you might expect, I am making this to be a useful reference for myself first and foremost.
 
 ### Notation
 
@@ -70,7 +77,7 @@ Any motion (or command) can be prefixed with a number `[count]` to iterate it th
 or `,` to advance the seek to the next instance in the "backwards" (uppercase) direction.
 (A `[count]` prefix will not affect `;` or `,`.)
 
-#### Linewise Movement
+#### Larger Movements
 
 * `(` `)` - go backward/forward by sentences
 * `{` `}` - go backward/forward by paragraph (blank lines)
@@ -86,9 +93,10 @@ or `,` to advance the seek to the next instance in the "backwards" (uppercase) d
 * `[num]G`, `:[num]<Enter>` - go to line number `[num]`
 * `G` - go the bottom of the page
 * `gg` - go to the top of the page
-* `<C-o>` - Jump to previous cursor position
-* `<C-i>` - Jump to next cursor position
-* `:ju` - Show jumplist
+* Jumplist feature (NOT motion commands!)
+    * `<C-o>` - Jump to previous (older) cursor position
+    * `<C-i>` or `<Tab>` - Jump to newer cursor position
+    * `:ju` - Show jumplist
 
 ## Normal Mode - Editing Text
 
@@ -115,7 +123,9 @@ Put cursor/line behavior depends on whether the the register contains characterw
 * `r[char]` - replace a single character with the specified `[char]` (does not use Insert mode)
 * `R` - Enter REPLACE mode, which is like INSERT mode but with overtype
 * Advanced
-    * `J` - Join line below to the current one
+    * `J` - Join current line to the line below
+    * `r<CR>` - "Split line" at cursor, assuming space selected
+    * `s<CR>` - As above, but remain in insert mode
 
 ### Multiple-character Edits
 
@@ -161,17 +171,37 @@ See also [Text Objects](#objects).
 
 Type any of these while some text is selected to apply the action
 
+* `v`, `V`, `<C-v>` - Switch to a different visual mode, as above. Match current mode to return to normal mode.
 * `y` - yank (copy) selected text
 * `d` - delete selected text
 * `c` - delete the selected text and go into insert mode (like c does above)
 * `p` - Replace with register
 * `r[char]` - Replace selection with `[char]`
-* `v`, `V`, `<C-v>` - Return to normal mode (when used symmetrically)
 * `I` - Block insert
 * `A` - Block append
 * `U`, `u` - Uppercase/lowercase
 * `J` - Join lines
 * `>`, `<` - Shift right/left by one `'shiftwidth'` (don't forget about `[count]` prefix)
+* Advanced
+    * `:` - Enter command mode with `'<,'>` already prepended,
+    which is a range of automatic marks representing the current selection.
+    * `:norm [commands]` - Execute a normal mode command sequence on the visual selection.
+    This can include inserts!
+    * `<C-v>[keystroke]` - While in command mode (or insert mode),
+    prefix a control character that you want inserted literally.
+    * Example: you have a visual linewise selection and you want to quote each line:
+        * Type `:norm I"<C-v><Esc>A"`
+        * The command line will display: `:'<,'>norm I"^[A"`.
+        The `^[` sequence will appear in a different color if your terminal supports it.
+        * This translates to: execute command mode (`:`) on the range defined by the start and end
+        of visual selection marks (`'<,'>`), run a normal mode command on each line (`norm`);
+        that command says: enter insert mode at the start of the line (`I`), insert a quote character (`"`),
+        enter the escape control character (`^[`) to leave insert mode
+        (remember `<Esc>` and `<C-[>` are synonymous, and `^` is a shorthand for Control-key),
+        append to line (`A`), and insert a quote character (`"`).
+        * `:norm` technically adds the final `<Esc>` at the end of the insert automatically,
+        so after running the command, you will not remain in insert mode.
+
 
 ## Registers<a name="registers"></a>
 

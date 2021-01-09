@@ -1,0 +1,12 @@
+# repo.yaml spec, whatever
+
+version: 0.1:cjs
+
+exports:
+  - type: GitHub Pages Site
+
+targets:
+  - type: local dev server
+    exec: bundle install && bundle exec jekyll serve
+    requires:
+      - https://bundler.io
