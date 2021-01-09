@@ -276,8 +276,7 @@ h3 a, h3 a:visited, h2 a, h2 a:visited{ color:#000; }
 h3 a:hover, h2 a:hover{ color:#000; border:none; }
 
 h4 {
-  font-size: 1em;
-  font-weight: normal;
+  font-size: 15px;
   color: #000;
 }
 

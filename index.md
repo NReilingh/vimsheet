@@ -37,8 +37,8 @@ See also `:help key-notation`.
 * `<S-...>` - Shift-key
 * Other modifiers tend to have support issues depending on your platform,
 so you probably won't use them, but here's what the notation is:
-  * `<M-...>` - Meta-key
   * `<A-...>` - Alt-key
+  * `<M-...>` - Meta-key
   * `<D-...>` - Command-key (macOS)
 
 ## Normal Mode - Motions
@@ -137,6 +137,8 @@ Put cursor/line behavior depends on whether the the register contains characterw
 
 A noun can be a motion, like `2W` (two whitespace-delimited words) or a text object like `it` (inner tag block).
 See also [Text Objects](#objects).
+
+#### Indenting
 
 * `>[noun]`, `<[noun]` - Shift `[noun]` forward/backward by one `'shiftwidth'`.
 * `>>`, `<<` - Shift line forward/backward by one `'shiftwidth'`.
