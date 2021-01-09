@@ -1,9 +1,9 @@
 ---
 layout: default
-title: A Reasonably Good Vim Cheat Sheet
+title: A Reasonably Okay Vim Cheat Sheet
 ---
 
-# A Reasonably Good Vim Cheat Sheet
+# A Reasonably Okay Vim Cheat Sheet
 
 This is a remix of <http://vimsheet.com>.
 
