@@ -33,8 +33,8 @@ as would be used when writing a key mapping or macro.
 That is, instead of `Ctrl+r` or `CTRL-R`, we will write `<C-r>`.
 See also `:help key-notation`.
 
-* `<S-...>` - Shift-key
 * `<C-...>` - Control-key
+* `<S-...>` - Shift-key
 * Other modifiers tend to have support issues depending on your platform,
 so you probably won't use them, but here's what the notation is:
   * `<M-...>` - Meta-key
