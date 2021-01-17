@@ -126,6 +126,9 @@ Put cursor/line behavior depends on whether the the register contains characterw
     * `J` - Join current line to the line below
     * `r<CR>` - "Split line" at cursor, assuming space selected
     * `s<CR>` - As above, but remain in insert mode
+    * `<C-a>` - Increment the number under the cursor
+    * `<C-x>` - Decrement, as above
+        * In visual mode, use the above commands prefixed with `g` to affect a range, with increments increasing linewise.
 
 ### Multiple-character Edits
 
