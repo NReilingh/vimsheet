@@ -73,9 +73,10 @@ Any motion (or command) can be prefixed with a number `[count]` to iterate it th
 * `F[char]` - Seek backwards to the next instance of `[char]`
 * `t[char]` - Seek forwards until adjacent to the next instance of `[char]`
 * `T[char]` - Seek backwards until adjacent to the next instance of `[char]`
-* All these commands can be followed by `;` to advance the seek to the next instance in the "forwards" (lowercase) direction,
-or `,` to advance the seek to the next instance in the "backwards" (uppercase) direction.
-(A `[count]` prefix will not affect `;` or `,`.)
+* `;` - Repeat the latest seek command once, or twice if the cursor would not move.
+* `,` - As above, but in the reverse direction.
+    * Note that the above two repeat commands can be used at any time,
+    not just immediately following an `f` or `t`!
 
 #### Larger Movements
 
