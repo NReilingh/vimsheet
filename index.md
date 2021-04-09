@@ -238,7 +238,9 @@ Objects must be prefixed with `a` or `i`, for "a" ("an") object or "inner" objec
 
 In practice, use these objects in context of another command, with the a/i prefix, like `cib`.
 
-## Exiting
+## Command Mode
+
+### Exiting
 
 * `:w` - write (save) the file, but don't exit
 * `:wq` - write (save) and quit
@@ -247,7 +249,15 @@ In practice, use these objects in context of another command, with the a/i prefi
 * `:wqa` - Write and quit all open tabs (thanks Brian Zick)
 * `:x` - Write and exit, but only write if there are changes
 
-## Search/Replace [unrevised]
+### Running External Commands
+
+* `:!<shell command>` - Run a shell command on the default shell. Output will appear in a new window
+* `:<some command>|<some other command>` - Run multiple vim commands by separating them with the `|` character
+* `%` - Represents the current file path
+  * For example, save your file and then feed it to a shell command with `:w|util %`
+* `:nnoremap <Leader>r :w|util %<CR>` - Set a leader-r command to save the file and run a shell command on it
+
+### Search/Replace [unrevised]
 
 * `*` - Search forward for the word nearest to the cursor
 * `#` - Search backward for the word nearest to the cursor
@@ -368,3 +378,4 @@ or better yet on the keyboard hardware level, so they don't depend on the partic
 * [Vim Registers](https://www.brianstorti.com/vim-registers/)
 * [Mastering the Vim Language](https://www.youtube.com/watch?v=wlR5gYd6um0)
 * [How to Do 90% of What Plugins Do (With Just Vim)](https://www.youtube.com/watch?v=XA2WjJbmmoM)
+* [Understand Vim Mappings and Create Your Own Shortcuts!](https://medium.com/vim-drops/understand-vim-mappings-and-create-your-own-shortcuts-f52ee4a6b8ed)
