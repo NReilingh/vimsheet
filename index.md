@@ -214,6 +214,7 @@ Type any of these while some text is selected to apply the action
 Prefix most yank/delete/change commands with `"[reg]` where `[reg]` is a specific register to copy to or from.
 
 * `:reg` - View the current registers
+* `".` - Last-inserted text. Useful when you don't want to repeat an entire edit, but you do want to reuse its content.
 * `""` - The unnamed register: default source of puts (p, P), acts like a pointer to the most recently written register
 * `"-` - Default register for deletes less than a full line
 * `"0` - Default destination of yanks
